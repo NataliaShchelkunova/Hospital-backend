@@ -1,7 +1,7 @@
 const User = require("../../models/user/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { secret } = require("./config");
+const secret = process.env.secret;
 const { validationResult } = require("express-validator");
 
 const generateAccecToken = (id, username) => {
@@ -32,7 +32,7 @@ module.exports.registration = async (req, res) => {
       res.status(400).json({ message: "Registration error" });
     }
   } else {
-    res.status(400).json({ message: "Check all field ", errors });
+    res.status(400).json({ message: "Check all field" });
   }
 };
 
@@ -54,7 +54,7 @@ module.exports.login = async (req, res) => {
       return res.status(400).json({ message: `user ${username} is defined` });
     }
   } catch (errors) {
-    res.status(400).json({ message: "Autorisation error", errors: errors });
+    res.status(400).json({ message: "Autorisation error" });
   }
 };
 

@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 
-const receptionData = new Schema({
-  username: { type: String, unique: true, required: true },
-  date: { type: Date, default: Date.now },
+const ReceptionData = new Schema({
+  namePatient: { type: String, required: true },
+  doctorName: { type: String, required: true },
+  newDate: { type: Date, default: Date.now },
+  complaints: { type: String, required: true },
 });
 
-module.exports = mongoose.model("receptionData", receptionData);
+module.exports = mongoose.model("receptionData", ReceptionData);
