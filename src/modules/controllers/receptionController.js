@@ -34,5 +34,4 @@ module.exports.getAllReception = (req, res) => {
   } catch (error) {
     res.status(404).send("Error, you can't get all reception");
   }
- 
 };
