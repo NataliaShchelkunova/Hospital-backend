@@ -25,3 +25,14 @@ module.exports.createNewReception = (req, res) => {
     res.status(404).send("Error, create new reception is crashed");
   }
 };
+
+module.exports.getAllReception = (req, res) => {
+  try {
+    ReceptionData.find().then((result) => {
+      res.send({ data: result });
+    });
+  } catch (error) {
+    res.status(404).send("Error, you can't get all reception");
+  }
+ 
+};
