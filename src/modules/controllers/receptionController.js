@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 
 module.exports.createNewReception = async (req, res) => {
   const { token } = req.headers;
-  console.log("token", token);
 
   const body = req.body;
   if (!token) {
