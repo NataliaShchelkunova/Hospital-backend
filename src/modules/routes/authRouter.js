@@ -8,7 +8,6 @@ const {
 
 const { check } = require("express-validator");
 
-//для прослушивания запросов
 router.post(
   "/registration",
   [

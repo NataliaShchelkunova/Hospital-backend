@@ -27,7 +27,7 @@ module.exports.registration = async (req, res) => {
       const user = new User({ username, password: hashPassword });
       await user.save();
       const token = generateAccecToken(user._id, username);
-      return res.json({ message: "User registered successfully", token });
+      return res.json({ token, username });
     } catch (error) {
       res.status(400).json({ message: "Registration error" });
     }
@@ -61,5 +61,7 @@ module.exports.login = async (req, res) => {
 module.exports.getUsers = async (req, res) => {
   try {
     res.json("server working");
-  } catch (error) {}
+  } catch (error) {
+    res.status(400).json({ message: "Users get error" });
+  }
 };

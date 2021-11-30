@@ -1,14 +1,24 @@
 const ReceptionData = require("../../models/reception/reception");
+const secret = process.env.secret;
+const jwt = require("jsonwebtoken");
 
-module.exports.createNewReception = (req, res) => {
+module.exports.createNewReception = async (req, res) => {
+  const { token } = req.headers;
+  console.log("token", token);
+
   const body = req.body;
+  if (!token) {
+    res.status(404).send("Error");
+  }
   try {
+    const infoForUser = await jwt.verify(token, secret);
     if (
       body.hasOwnProperty("namePatient") &&
       body.hasOwnProperty("doctorName") &&
       body.hasOwnProperty("newDate") &&
       body.hasOwnProperty("complaints")
     ) {
+      body.userId = infoForUser.id;
       const newReception = new ReceptionData(body);
       newReception
         .save()
@@ -16,7 +26,7 @@ module.exports.createNewReception = (req, res) => {
           res.send({ data: result });
         })
         .catch((error) => {
-          res.status(404).send("Error, field can't be empty");
+          res.status(404).send("Error");
         });
     } else {
       res.status(404).send(" Error, check all field");
@@ -26,11 +36,22 @@ module.exports.createNewReception = (req, res) => {
   }
 };
 
-module.exports.getAllReception = (req, res) => {
+module.exports.getAllReception = async (req, res) => {
+  const { token } = req.headers;
+  if (!token) {
+    res.status(404).send("Error");
+  }
   try {
-    ReceptionData.find().then((result) => {
-      res.send({ data: result });
-    });
+    const infoForUser = await jwt.verify(token, secret);
+    if (infoForUser) {
+      ReceptionData.find({ userId: infoForUser.id })
+        .then((result) => {
+          res.send({ data: result });
+        })
+        .catch((error) => {
+          res.status(404).send("Error");
+        });
+    }
   } catch (error) {
     res.status(404).send("Error, you can't get all reception");
   }
