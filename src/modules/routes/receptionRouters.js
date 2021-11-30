@@ -1,8 +1,12 @@
 const { Router } = require("express");
 const receptionRouter = new Router();
 
-const { createNewReception } = require("../controllers/receptionController");
+const {
+  createNewReception,
+  getAllReception,
+} = require("../controllers/receptionController");
 
 receptionRouter.post("/createNewReception", createNewReception);
+receptionRouter.get("/getAllReception", getAllReception);
 
 module.exports = receptionRouter;
