@@ -55,3 +55,16 @@ module.exports.getAllReception = async (req, res) => {
     res.status(404).send("Error, you can't get all reception");
   }
 };
+
+module.exports.deleteOneReception = async (req, res) => {
+  const id = req.query._id;
+  if (req.query._id) {
+    ReceptionData.deleteOne({ _id: id }).then((result) => {
+      ReceptionData.find().then((result) => {
+        res.send({ data: result });
+      });
+    });
+  } else {
+    res.status(404).send("Error");
+  }
+};
