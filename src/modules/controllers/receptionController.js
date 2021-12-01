@@ -68,3 +68,22 @@ module.exports.deleteOneReception = async (req, res) => {
     res.status(404).send("Error");
   }
 };
+
+module.exports.editOneReception = async (req, res) => {
+  const id = req.query._id;
+  const body = req.body;
+  if (
+    (body._id && body.hasOwnProperty("namePatient")) ||
+    body.hasOwnProperty("doctorName") ||
+    body.hasOwnProperty("newDate") ||
+    body.hasOwnProperty("complaints")
+  ) {
+    ReceptionData.updateOne({ _id: id }, body).then((result) => {
+      ReceptionData.find().then((result) => {
+        res.send({ data: result });
+      });
+    });
+  } else {
+    res.status(404).send("Error edit Reception");
+  }
+};
