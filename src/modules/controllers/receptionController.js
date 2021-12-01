@@ -70,7 +70,6 @@ module.exports.deleteOneReception = async (req, res) => {
 };
 
 module.exports.editOneReception = async (req, res) => {
-  const id = req.query._id;
   const body = req.body;
   if (
     (body._id && body.hasOwnProperty("namePatient")) ||
@@ -78,7 +77,7 @@ module.exports.editOneReception = async (req, res) => {
     body.hasOwnProperty("newDate") ||
     body.hasOwnProperty("complaints")
   ) {
-    ReceptionData.updateOne({ _id: id }, body).then((result) => {
+    ReceptionData.updateOne({ _id: body._id }, body).then((result) => {
       ReceptionData.find().then((result) => {
         res.send({ data: result });
       });
