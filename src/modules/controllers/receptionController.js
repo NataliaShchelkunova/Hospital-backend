@@ -58,13 +58,44 @@ module.exports.getAllReception = async (req, res) => {
 
 module.exports.deleteOneReception = async (req, res) => {
   const id = req.query._id;
-  if (req.query._id) {
-    ReceptionData.deleteOne({ _id: id }).then((result) => {
-      ReceptionData.find().then((result) => {
-        res.send({ data: result });
+  const { token } = req.headers;
+  try {
+    const infoForUser = await jwt.verify(token, secret);
+    if (req.query._id && infoForUser) {
+      ReceptionData.deleteOne({ _id: id }).then((result) => {
+        ReceptionData.find({ userId: infoForUser.id }).then((result) => {
+          res.send({ data: result });
+        });
       });
-    });
-  } else {
+    } else {
+      res.status(404).send("Error");
+    }
+  } catch (error) {
     res.status(404).send("Error");
+  }
+};
+
+module.exports.editOneReception = async (req, res) => {
+  const body = req.body;
+  const { token } = req.headers;
+  try {
+    const infoForUser = await jwt.verify(token, secret);
+
+    if (
+      (body._id && infoForUser && body.hasOwnProperty("namePatient")) ||
+      body.hasOwnProperty("doctorName") ||
+      body.hasOwnProperty("newDate") ||
+      body.hasOwnProperty("complaints")
+    ) {
+      ReceptionData.updateOne({ _id: body._id }, body).then((result) => {
+        ReceptionData.find({ userId: infoForUser.id }).then((result) => {
+          res.send({ data: result });
+        });
+      });
+    } else {
+      res.status(404).send("Error edit Reception");
+    }
+  } catch (error) {
+    res.status(404).send("Error edit");
   }
 };
